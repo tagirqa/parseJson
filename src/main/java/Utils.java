@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 
 public class Utils {
 
@@ -24,27 +26,18 @@ public class Utils {
 
     public static LocalDate converterDate(String text) {    // перевод String в форма LocalDate
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        DateTimeFormatter dateTimeFormatter1 = DateTimeFormatter.ofPattern("dd.MM,yy");
-        DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        DateTimeFormatter dateTimeFormatter3 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        try {
-            if (text.matches("(.*),(.*)")) {
-                return LocalDate.parse(text, dateTimeFormatter1);
-            }
-        else if (text.matches("(.*)\\.(.*)")) {
-                return LocalDate.parse(text, dateTimeFormatter2);
-            }
-            else if (text.length() == 10) {
-                return LocalDate.parse(text,dateTimeFormatter3);
-            }
-            else return LocalDate.parse(text, dateTimeFormatter);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+        DateTimeFormatter dfs = new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd.MM,yy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 
-        return null;
+                .toFormatter();
+
+
+        LocalDate date = LocalDate.parse(text,dfs);
+
+        return date;
     }
 
 
