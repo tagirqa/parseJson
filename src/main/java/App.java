@@ -5,8 +5,11 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class App {
@@ -35,9 +38,14 @@ public class App {
 
         System.out.println();
 
-        companyList.forEach(x->x.getSecurities().stream().      // Вывести все просроченные ценные бумаги
+        System.out.println("Всего бумаг: " + companyList.stream().flatMap(x->x.getSecurities(). // Выводим количество просроченых бумаг
+                stream().filter(a-> a.getDateTo().isBefore(LocalDate.now()))).count());
+
+        companyList.forEach(x->x.getSecurities().stream().   // Вывести все просроченные ценные бумаги
                 filter(a-> a.getDateTo().isBefore(LocalDate.now())).
                 forEach(b -> System.out.println("Код: " + b.getCode() + ", Дата истичения: " + b.getDateTo() + ", Организация: " + x.getNameFull())));
+
+
 
         System.out.println();
 
